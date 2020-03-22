@@ -8,6 +8,8 @@ package main
 
 import (
 	"fmt"
+	"image/color"
+	"math/rand"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -16,13 +18,11 @@ import (
 	"golang.org/x/image/colornames"
 )
 
-const (
-	cellWidth float64 = 20
-)
-
 var (
+	cellWidth  = 20.0
 	tickPeriod = 400
-	N          = 50
+	N          = 30
+	windowSize = cellWidth * float64(N)
 )
 
 type Matrix [][]int
@@ -65,7 +65,6 @@ func (g *Game) Swap() {
 }
 
 func run(g *Game) {
-	windowSize := cellWidth * float64(len(g.Input))
 	cfg := pixelgl.WindowConfig{
 		Title:  "Game of Life",
 		Bounds: pixel.R(0, 0, windowSize, windowSize),
@@ -91,11 +90,21 @@ func run(g *Game) {
 				if cell == 0 {
 					continue
 				}
-				// imd.Color = color.RGBA{R: uint8(rand.Intn(256)), G: uint8(rand.Intn(256)), B: uint8(rand.Intn(256)), A: 0xFF}
+				imd.Color = colornames.Map[colornames.Names[rand.Intn(len(colornames.Names))]]
 				start := pixel.V(float64(c)*cellWidth, windowSize-float64(r)*cellWidth)
 				imd.Push(start, pixel.V(start.X+cellWidth, start.Y+cellWidth))
 				imd.Rectangle(0)
 			}
+		}
+
+		var index = 0.0
+		imd.Color = color.RGBA{R: 125, G: 125, B: 125, A: 0x8F}
+		for index < windowSize {
+			imd.Push(pixel.V(0.0, index), pixel.V(windowSize, index))
+			imd.Line(1.1)
+			imd.Push(pixel.V(index, 0.0), pixel.V(index, windowSize))
+			imd.Line(1)
+			index += cellWidth
 		}
 
 		imd.Draw(win)
