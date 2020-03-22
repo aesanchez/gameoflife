@@ -21,7 +21,7 @@ const (
 )
 
 var (
-	tickPeriod = 1200000
+	tickPeriod = 100
 )
 
 type Matrix [][]int
@@ -38,13 +38,6 @@ var lifeInput = Matrix{
 	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 }
-
-//var lifeInput = [][]bool{
-//	[]bool{0, 0, 0, 0},
-//	[]bool{0, 1, 1, 0},
-//	[]bool{0, 1, 1, 0},
-//	[]bool{0, 0, 0, 0},
-//}
 
 type Game struct {
 	Input  Matrix
@@ -92,11 +85,13 @@ func run(g *Game) {
 
 		imd.Draw(win)
 		win.Update()
+		if win.Pressed(pixelgl.KeySpace) {
+			g.Tick()
+			g.Swap()
 
-		g.Tick()
-		g.Swap()
+			<-time.Tick(time.Millisecond * time.Duration(tickPeriod))
+		}
 
-		<-time.Tick(time.Millisecond * time.Duration(tickPeriod))
 	}
 }
 
@@ -107,14 +102,6 @@ func main() {
 	for i := 0; i < len(lifeInput); i++ {
 		game.Output[i] = make([]int, len(lifeInput[i]))
 	}
-	//game.Input.Print()
-	//for {
-	//	game.Tick()
-	//	<-time.Tick(time.Millisecond * 500)
-	//	fmt.Println()
-	//	game.Output.Print()
-	//	game.Swap()
-	//}
 	pixelgl.Run(func() { run(game) })
 }
 
@@ -161,6 +148,8 @@ func (g *Game) RunRules(r, c int) {
 		//dead
 		if n == 3 {
 			g.Output[r][c] = 1
+		} else {
+			g.Output[r][c] = 0
 		}
 	}
 }
