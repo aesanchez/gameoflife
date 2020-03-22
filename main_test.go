@@ -10,15 +10,15 @@ func TestCountNeighbours(t *testing.T) {
 		[]bool{false, false, false},
 		[]bool{true, true, true},
 		[]bool{false, true, true},
-	}, 0, 0))
-	fmt.Println(countNeighbours(Matrix{
-		[]bool{false, false, false},
-		[]bool{true, true, true},
-		[]bool{false, true, true},
-	}, 1, 0))
-	fmt.Println(countNeighbours(Matrix{
-		[]bool{false, false, false},
-		[]bool{true, true, true},
-		[]bool{false, true, true},
-	}, 1, 1))
+	}, 2, 2))
+	//fmt.Println(countNeighbours(Matrix{
+	//	[]bool{false, false, false},
+	//	[]bool{true, true, true},
+	//	[]bool{false, true, true},
+	//}, 1, 0))
+	//fmt.Println(countNeighbours(Matrix{
+	//	[]bool{false, false, false},
+	//	[]bool{true, true, true},
+	//	[]bool{false, true, true},
+	//}, 1, 1))
 }

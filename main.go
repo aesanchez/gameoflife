@@ -84,7 +84,6 @@ func main() {
 			}
 		}
 	}
-
 	// pixelgl.Run(run)
 }
 
@@ -96,18 +95,14 @@ x x x o
 */
 func countNeighbours(input Matrix, r, c int) int {
 	alive := 0
-	startY := r
-	startX := c
-	if r != 0 {
-		startY = -1
-	}
-	if c != 0 {
-		startX = -1
-	}
+	for i := r - 1; i <= r+1; i++ {
+		for j := c - 1; j <= c+1; j++ {
+			if (i < 0 || j < 0) || (i >= len(input) || j >= len(input[r])) ||
+				(i == r && j == c) {
+				continue
+			}
 
-	for i := startY; i <= r+1; i++ {
-		for j := startX; j <= c+1; j++ {
-			if input[r-i][c-j] {
+			if input[i][j] {
 				alive++
 			}
 		}
