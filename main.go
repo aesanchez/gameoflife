@@ -16,9 +16,12 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+const (
+	cellWidth float64 = 20
+)
+
 var (
 	tickPeriod = 120
-	cellWidth  = 20
 )
 
 type Matrix [][]bool
@@ -51,8 +54,7 @@ func (g *Game) Swap() {
 }
 
 func run(g *Game) {
-
-	windowSize := cellWidth * len(g.Input)
+	windowSize := cellWidth * float64(len(g.Input))
 	cfg := pixelgl.WindowConfig{
 		Title:  "Game of Life",
 		Bounds: pixel.R(0, 0, windowSize, windowSize),
@@ -67,46 +69,49 @@ func run(g *Game) {
 
 	imd.Color = colornames.Black
 
-	for r, cells := range g.Input {
-		for c := range cells {
-			g.RunRules(r, c)
-		}
-	}
-
 	for !win.Closed() {
 		win.Clear(colornames.White)
 		imd.Clear()
 
-		g.Tick()
-		g.Swap()
+		for r, cells := range g.Input {
+			for c, cell := range cells {
+				// ignore "Dead" cells
+				if !cell {
+					continue
+				}
 
-		imd.Push(point1, pixel.V(point1.X+10, point1.Y+10))
-		imd.Rectangle(0)
+				start := pixel.V(float64(r)*cellWidth, float64(c)*cellWidth)
+				imd.Push(start, pixel.V(start.X+cellWidth, start.Y+cellWidth))
+				imd.Rectangle(0)
+			}
+		}
 
 		imd.Draw(win)
 		win.Update()
-		point1.X++
-		point1.Y++
-		<-time.Tick(tickPeriod * time.Millisecond)
+
+		g.Tick()
+		g.Swap()
+
+		<-time.Tick(time.Millisecond * time.Duration(tickPeriod))
 	}
 }
 
 func main() {
-	game := Game{}
+	game := &Game{}
 	game.Input = lifeInput
 	game.Output = make(Matrix, len(lifeInput))
 	for i := 0; i < len(lifeInput); i++ {
 		game.Output[i] = make([]bool, len(lifeInput[i]))
 	}
-	game.Input.Print()
-	for {
-		game.Tick()
-		<-time.Tick(time.Millisecond * 500)
-		fmt.Println()
-		game.Output.Print()
-		game.Swap()
-	}
-	// pixelgl.Run(run(game))
+	//game.Input.Print()
+	//for {
+	//	game.Tick()
+	//	<-time.Tick(time.Millisecond * 500)
+	//	fmt.Println()
+	//	game.Output.Print()
+	//	game.Swap()
+	//}
+	pixelgl.Run(func() { run(game) })
 }
 
 func countNeighbours(input Matrix, r, c int) int {
