@@ -7,6 +7,7 @@ package main
 // * Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -16,13 +17,33 @@ import (
 )
 
 const (
-	tickRate = 120
+	tickRate   = 120
+	windowSize = 1000
 )
+
+type Matrix [][]bool
+
+var lifeInput = [][]bool{
+	[]bool{false, false, false, false, false},
+	[]bool{false, false, false, false, false},
+	[]bool{false, true, true, true, false},
+	[]bool{false, false, false, false, false},
+	[]bool{false, false, false, false, false},
+}
+
+type Game struct {
+	Input  Matrix
+	Output Matrix
+}
+
+func (g *Game) Swap() {
+	g.Input = g.Output
+}
 
 func run() {
 	cfg := pixelgl.WindowConfig{
-		Title:  "Pixel Rocks!",
-		Bounds: pixel.R(0, 0, 1000, 1000),
+		Title:  "Game of Life",
+		Bounds: pixel.R(0, 0, windowSize, windowSize),
 		VSync:  false,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -35,16 +56,12 @@ func run() {
 	imd.Color = colornames.Black
 
 	point1 := pixel.Vec{X: 0, Y: 0}
-	point2 := pixel.Vec{X: 50, Y: 50}
 
 	for !win.Closed() {
 		win.Clear(colornames.White)
 		imd.Clear()
 
 		imd.Push(point1, pixel.V(point1.X+10, point1.Y+10))
-		imd.Rectangle(0)
-
-		imd.Push(point2, pixel.V(point2.X+10, point2.Y+10))
 		imd.Rectangle(0)
 
 		imd.Draw(win)
@@ -56,5 +73,79 @@ func run() {
 }
 
 func main() {
-	pixelgl.Run(run)
+	game := Game{}
+	game.Input = lifeInput
+	game.Output = lifeInput
+	game.Input.Print()
+	for {
+		for r, cells := range game.Input {
+			for c := range cells {
+				n := countNeighbours(game.Input, r, c)
+				fmt.Printf("Row = %d, Column = %d, N = %d\n", r, c, n)
+				g
+			}
+		}
+	}
+
+	// pixelgl.Run(run)
+}
+
+/*
+x x x x
+o o x o
+x x o o
+x x x o
+*/
+func countNeighbours(input Matrix, r, c int) int {
+	alive := 0
+	startY := r
+	startX := c
+	if r != 0 {
+		startY = -1
+	}
+	if c != 0 {
+		startX = -1
+	}
+
+	for i := startY; i <= r+1; i++ {
+		for j := startX; j <= c+1; j++ {
+			if input[r-i][c-j] {
+				alive++
+			}
+		}
+	}
+
+	return alive
+}
+
+func (g *Game) RunRules() {
+	if game.Input[r][c] {
+		//alive
+		if n < 2 || n > 3 {
+			// * Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+			// * Any live cell with more than three live neighbours dies, as if by overpopulation.
+			game.Output[r][c] = false
+		} else {
+			// * Any live cell with two or three live neighbours lives on to the next generation.
+			game.Output[r][c] = true
+		}
+	} else {
+		//dead
+		if n == 3 {
+			game.Output[r][c] = true
+		}
+	}
+}
+
+func (m Matrix) Print() {
+	for _, cells := range m {
+		for _, cell := range cells {
+			if cell == true {
+				fmt.Print("■")
+			} else {
+				fmt.Print(".")
+			}
+		}
+		fmt.Println()
+	}
 }
