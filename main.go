@@ -21,18 +21,22 @@ const (
 )
 
 var (
-	tickPeriod = 120
+	tickPeriod = 1200000
 )
 
 type Matrix [][]int
 
 var lifeInput = Matrix{
-	[]int{0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 1, 1, 1, 0},
-	[]int{0, 1, 1, 1, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+	[]int{0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 }
 
 //var lifeInput = [][]bool{
@@ -80,7 +84,7 @@ func run(g *Game) {
 					continue
 				}
 
-				start := pixel.V(float64(r)*cellWidth, float64(c)*cellWidth)
+				start := pixel.V(float64(c)*cellWidth, windowSize-float64(r)*cellWidth)
 				imd.Push(start, pixel.V(start.X+cellWidth, start.Y+cellWidth))
 				imd.Rectangle(0)
 			}
