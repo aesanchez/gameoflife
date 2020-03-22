@@ -23,13 +23,21 @@ const (
 
 type Matrix [][]bool
 
-var lifeInput = [][]bool{
-	[]bool{false, false, false, false, false},
-	[]bool{false, false, false, false, false},
-	[]bool{false, true, true, true, false},
-	[]bool{false, false, false, false, false},
-	[]bool{false, false, false, false, false},
+var lifeInput = Matrix{
+	[]bool{false, false, false, false, false, false},
+	[]bool{false, false, false, false, false, false},
+	[]bool{false, false, true, true, true, false},
+	[]bool{false, true, true, true, false, false},
+	[]bool{false, false, false, false, false, false},
+	[]bool{false, false, false, false, false, false},
 }
+
+//var lifeInput = [][]bool{
+//	[]bool{false, false, false, false},
+//	[]bool{false, true, true, false},
+//	[]bool{false, true, true, false},
+//	[]bool{false, false, false, false},
+//}
 
 type Game struct {
 	Input  Matrix
@@ -37,7 +45,9 @@ type Game struct {
 }
 
 func (g *Game) Swap() {
-	g.Input = g.Output
+	aux := g.Output
+	g.Output = g.Input
+	g.Input = aux
 }
 
 func run() {
@@ -75,7 +85,10 @@ func run() {
 func main() {
 	game := Game{}
 	game.Input = lifeInput
-	game.Output = lifeInput
+	game.Output = make(Matrix, len(lifeInput))
+	for i := 0; i < len(lifeInput); i++ {
+		game.Output[i] = make([]bool, len(lifeInput[i]))
+	}
 	game.Input.Print()
 	for {
 		for r, cells := range game.Input {
@@ -83,16 +96,14 @@ func main() {
 				game.RunRules(r, c)
 			}
 		}
+		<-time.Tick(time.Millisecond * 500)
+		fmt.Println()
+		game.Output.Print()
+		game.Swap()
 	}
 	// pixelgl.Run(run)
 }
 
-/*
-x x x x
-o o x o
-x x o o
-x x x o
-*/
 func countNeighbours(input Matrix, r, c int) int {
 	alive := 0
 	for i := r - 1; i <= r+1; i++ {
@@ -113,7 +124,7 @@ func countNeighbours(input Matrix, r, c int) int {
 
 func (g *Game) RunRules(r, c int) {
 	n := countNeighbours(g.Input, r, c)
-	fmt.Printf("Row = %d, Column = %d, N = %d\n", r, c, n)
+	// fmt.Printf("Row = %d, Column = %d, N = %d\n", r, c, n)
 	if g.Input[r][c] {
 		//alive
 		if n < 2 || n > 3 {
