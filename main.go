@@ -21,22 +21,36 @@ const (
 )
 
 var (
-	tickPeriod = 100
+	tickPeriod = 400
+	N          = 50
 )
 
 type Matrix [][]int
 
-var lifeInput = Matrix{
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-	[]int{0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+type LifeInput struct {
+	Cells        Matrix
+	RowOffset    int
+	ColumnOffset int
+}
+
+var lifeInput1 = LifeInput{
+	Cells: Matrix{
+		[]int{1, 0, 0},
+		[]int{0, 1, 1},
+		[]int{1, 1, 0},
+	},
+	RowOffset:    5,
+	ColumnOffset: 5,
+}
+
+var lifeInput2 = LifeInput{
+	Cells: Matrix{
+		[]int{1, 0, 0},
+		[]int{0, 1, 1},
+		[]int{1, 1, 0},
+	},
+	RowOffset:    15,
+	ColumnOffset: 5,
 }
 
 type Game struct {
@@ -66,6 +80,7 @@ func run(g *Game) {
 
 	imd.Color = colornames.Black
 
+	tickChan := time.Tick(time.Millisecond * time.Duration(tickPeriod))
 	for !win.Closed() {
 		win.Clear(colornames.White)
 		imd.Clear()
@@ -76,7 +91,7 @@ func run(g *Game) {
 				if cell == 0 {
 					continue
 				}
-
+				// imd.Color = color.RGBA{R: uint8(rand.Intn(256)), G: uint8(rand.Intn(256)), B: uint8(rand.Intn(256)), A: 0xFF}
 				start := pixel.V(float64(c)*cellWidth, windowSize-float64(r)*cellWidth)
 				imd.Push(start, pixel.V(start.X+cellWidth, start.Y+cellWidth))
 				imd.Rectangle(0)
@@ -85,11 +100,20 @@ func run(g *Game) {
 
 		imd.Draw(win)
 		win.Update()
-		if win.Pressed(pixelgl.KeySpace) {
+
+		if win.Pressed(pixelgl.KeyUp) && tickPeriod > 20 {
+			tickPeriod -= 20
+		}
+		if win.Pressed(pixelgl.KeyDown) {
+			tickPeriod += 20
+		}
+
+		select {
+		case <-tickChan:
 			g.Tick()
 			g.Swap()
-
-			<-time.Tick(time.Millisecond * time.Duration(tickPeriod))
+			tickChan = time.Tick(time.Millisecond * time.Duration(tickPeriod))
+		default:
 		}
 
 	}
@@ -97,11 +121,25 @@ func run(g *Game) {
 
 func main() {
 	game := &Game{}
-	game.Input = lifeInput
-	game.Output = make(Matrix, len(lifeInput))
-	for i := 0; i < len(lifeInput); i++ {
-		game.Output[i] = make([]int, len(lifeInput[i]))
+	game.Input = make(Matrix, N)
+	game.Output = make(Matrix, N)
+	for i := 0; i < N; i++ {
+		game.Output[i] = make([]int, N)
+		game.Input[i] = make([]int, N)
 	}
+
+	for r, cells := range lifeInput1.Cells {
+		for c, cell := range cells {
+			game.Input[lifeInput1.RowOffset+r][lifeInput1.ColumnOffset+c] = cell
+		}
+	}
+
+	for r, cells := range lifeInput2.Cells {
+		for c, cell := range cells {
+			game.Input[lifeInput2.RowOffset+r][lifeInput2.ColumnOffset+c] = cell
+		}
+	}
+
 	pixelgl.Run(func() { run(game) })
 }
 
