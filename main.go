@@ -80,9 +80,7 @@ func main() {
 	for {
 		for r, cells := range game.Input {
 			for c := range cells {
-				n := countNeighbours(game.Input, r, c)
-				fmt.Printf("Row = %d, Column = %d, N = %d\n", r, c, n)
-				g
+				game.RunRules(r, c)
 			}
 		}
 	}
@@ -118,21 +116,23 @@ func countNeighbours(input Matrix, r, c int) int {
 	return alive
 }
 
-func (g *Game) RunRules() {
-	if game.Input[r][c] {
+func (g *Game) RunRules(r, c int) {
+	n := countNeighbours(g.Input, r, c)
+	fmt.Printf("Row = %d, Column = %d, N = %d\n", r, c, n)
+	if g.Input[r][c] {
 		//alive
 		if n < 2 || n > 3 {
 			// * Any live cell with fewer than two live neighbours dies, as if by underpopulation.
 			// * Any live cell with more than three live neighbours dies, as if by overpopulation.
-			game.Output[r][c] = false
+			g.Output[r][c] = false
 		} else {
 			// * Any live cell with two or three live neighbours lives on to the next generation.
-			game.Output[r][c] = true
+			g.Output[r][c] = true
 		}
 	} else {
 		//dead
 		if n == 3 {
-			game.Output[r][c] = true
+			g.Output[r][c] = true
 		}
 	}
 }
