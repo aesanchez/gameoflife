@@ -24,22 +24,22 @@ var (
 	tickPeriod = 120
 )
 
-type Matrix [][]bool
+type Matrix [][]int
 
 var lifeInput = Matrix{
-	[]bool{false, false, false, false, false, false},
-	[]bool{false, false, false, false, false, false},
-	[]bool{false, false, true, true, true, false},
-	[]bool{false, true, true, true, false, false},
-	[]bool{false, false, false, false, false, false},
-	[]bool{false, false, false, false, false, false},
+	[]int{0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 1, 1, 1, 0},
+	[]int{0, 1, 1, 1, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0},
+	[]int{0, 0, 0, 0, 0, 0},
 }
 
 //var lifeInput = [][]bool{
-//	[]bool{false, false, false, false},
-//	[]bool{false, true, true, false},
-//	[]bool{false, true, true, false},
-//	[]bool{false, false, false, false},
+//	[]bool{0, 0, 0, 0},
+//	[]bool{0, 1, 1, 0},
+//	[]bool{0, 1, 1, 0},
+//	[]bool{0, 0, 0, 0},
 //}
 
 type Game struct {
@@ -58,7 +58,7 @@ func run(g *Game) {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Game of Life",
 		Bounds: pixel.R(0, 0, windowSize, windowSize),
-		VSync:  false,
+		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
@@ -76,7 +76,7 @@ func run(g *Game) {
 		for r, cells := range g.Input {
 			for c, cell := range cells {
 				// ignore "Dead" cells
-				if !cell {
+				if cell == 0 {
 					continue
 				}
 
@@ -101,7 +101,7 @@ func main() {
 	game.Input = lifeInput
 	game.Output = make(Matrix, len(lifeInput))
 	for i := 0; i < len(lifeInput); i++ {
-		game.Output[i] = make([]bool, len(lifeInput[i]))
+		game.Output[i] = make([]int, len(lifeInput[i]))
 	}
 	//game.Input.Print()
 	//for {
@@ -123,7 +123,7 @@ func countNeighbours(input Matrix, r, c int) int {
 				continue
 			}
 
-			if input[i][j] {
+			if input[i][j] == 1 {
 				alive++
 			}
 		}
@@ -143,20 +143,20 @@ func (g *Game) Tick() {
 func (g *Game) RunRules(r, c int) {
 	n := countNeighbours(g.Input, r, c)
 	// fmt.Printf("Row = %d, Column = %d, N = %d\n", r, c, n)
-	if g.Input[r][c] {
+	if g.Input[r][c] == 1 {
 		//alive
 		if n < 2 || n > 3 {
 			// * Any live cell with fewer than two live neighbours dies, as if by underpopulation.
 			// * Any live cell with more than three live neighbours dies, as if by overpopulation.
-			g.Output[r][c] = false
+			g.Output[r][c] = 0
 		} else {
 			// * Any live cell with two or three live neighbours lives on to the next generation.
-			g.Output[r][c] = true
+			g.Output[r][c] = 1
 		}
 	} else {
 		//dead
 		if n == 3 {
-			g.Output[r][c] = true
+			g.Output[r][c] = 1
 		}
 	}
 }
@@ -164,7 +164,7 @@ func (g *Game) RunRules(r, c int) {
 func (m Matrix) Print() {
 	for _, cells := range m {
 		for _, cell := range cells {
-			if cell == true {
+			if cell == 1 {
 				fmt.Print("■")
 			} else {
 				fmt.Print(".")
