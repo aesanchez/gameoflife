@@ -15,8 +15,8 @@ import (
 var (
 	tickPeriod = 60
 
-	cellsWidth  int = 70
-	cellsHeight int = 100
+	cellsWidth  int = 1500
+	cellsHeight int = 1000
 
 	cellSize float64 = 10.0
 
@@ -25,6 +25,8 @@ var (
 
 	windowWidth  = windowMaxWidth
 	windowHeight = windowMaxHeight
+
+	epilepsyMode = false
 )
 
 func calculateResolution() {
@@ -43,8 +45,9 @@ func calculateResolution() {
 func main() {
 	calculateResolution()
 
-	// input := ReadInputFile("res/spacefiller.rle")
-	input := gliderGun
+	input := ReadInputFile("res/cambrian-explosion.rle")
+	input.ColumnOffset = 300
+	input.RowOffset = 150
 
 	game := NewGame(cellsWidth, cellsHeight)
 	game.LoadLifeInput(input)
@@ -79,8 +82,6 @@ func run(g *Game) {
 				if cell == 0 {
 					continue
 				}
-				// imd.Color = colornames.Black
-				// imd.Color = colornames.Map[colornames.Names[rand.Intn(len(colornames.Names))]]
 				start := pixel.V(float64(c)*cellSize, windowHeight-float64(r)*cellSize)
 				imd.Push(start, pixel.V(start.X+cellSize, start.Y+cellSize))
 				imd.Rectangle(0)
@@ -88,21 +89,21 @@ func run(g *Game) {
 		}
 
 		// grid
-		prevColor := imd.Color
-		imd.Color = color.RGBA{R: 125, G: 125, B: 125, A: 0x8F}
-		index := 0.0
-		for index < windowHeight {
-			imd.Push(pixel.V(0.0, index), pixel.V(windowWidth, index))
-			imd.Line(1.1)
-			index += cellSize
-		}
-		index = 0.0
-		for index < windowWidth {
-			imd.Push(pixel.V(index, 0.0), pixel.V(index, windowHeight))
-			imd.Line(1.1)
-			index += cellSize
-		}
-		imd.Color = prevColor
+		// prevColor := imd.Color
+		// imd.Color = color.RGBA{R: 125, G: 125, B: 125, A: 0x8F}
+		// index := 0.0
+		// for index < windowHeight {
+		// 	imd.Push(pixel.V(0.0, index), pixel.V(windowWidth, index))
+		// 	imd.Line(1.1)
+		// 	index += cellSize
+		// }
+		// index = 0.0
+		// for index < windowWidth {
+		// 	imd.Push(pixel.V(index, 0.0), pixel.V(index, windowHeight))
+		// 	imd.Line(1.1)
+		// 	index += cellSize
+		// }
+		// imd.Color = prevColor
 
 		imd.Draw(win)
 		win.Update()
@@ -119,8 +120,11 @@ func run(g *Game) {
 			g.Tick()
 			g.Swap()
 			tickChan = time.Tick(time.Millisecond * time.Duration(tickPeriod))
-			imd.Color = newColor()
-
+			if epilepsyMode {
+				imd.Color = newColor()
+			} else {
+				imd.Color = colornames.Black
+			}
 		default:
 		}
 
