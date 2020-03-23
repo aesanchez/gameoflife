@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 	"math/rand"
 	"time"
@@ -12,19 +13,38 @@ import (
 )
 
 var (
-	cellWidth  float64 = 10.0
-	tickPeriod         = 60
+	tickPeriod = 60
 
-	cellsWidth  int = 50
-	cellsHeight int = 50
+	cellsWidth  int = 70
+	cellsHeight int = 100
 
-	windowWidth  = cellWidth * float64(cellsWidth)
-	windowHeight = cellWidth * float64(cellsHeight)
+	cellSize float64 = 10.0
+
+	windowMaxWidth  float64 = 1600
+	windowMaxHeight float64 = 1000
+
+	windowWidth  = windowMaxWidth
+	windowHeight = windowMaxHeight
 )
 
+func calculateResolution() {
+	cellWidth := windowMaxWidth / float64(cellsWidth)
+	cellHeight := windowMaxHeight / float64(cellsHeight)
+	if cellWidth < cellHeight {
+		cellSize = cellWidth
+	} else {
+		cellSize = cellHeight
+	}
+	windowWidth = cellSize * float64(cellsWidth)
+	windowHeight = cellSize * float64(cellsHeight)
+	fmt.Println(windowHeight, windowWidth)
+}
+
 func main() {
-	input := ReadInputFile("res/spacefiller.rle")
-	// input := gliderGun
+	calculateResolution()
+
+	// input := ReadInputFile("res/spacefiller.rle")
+	input := gliderGun
 
 	game := NewGame(cellsWidth, cellsHeight)
 	game.LoadLifeInput(input)
@@ -61,8 +81,8 @@ func run(g *Game) {
 				}
 				// imd.Color = colornames.Black
 				// imd.Color = colornames.Map[colornames.Names[rand.Intn(len(colornames.Names))]]
-				start := pixel.V(float64(c)*cellWidth, windowHeight-float64(r)*cellWidth)
-				imd.Push(start, pixel.V(start.X+cellWidth, start.Y+cellWidth))
+				start := pixel.V(float64(c)*cellSize, windowHeight-float64(r)*cellSize)
+				imd.Push(start, pixel.V(start.X+cellSize, start.Y+cellSize))
 				imd.Rectangle(0)
 			}
 		}
@@ -74,13 +94,13 @@ func run(g *Game) {
 		for index < windowHeight {
 			imd.Push(pixel.V(0.0, index), pixel.V(windowWidth, index))
 			imd.Line(1.1)
-			index += cellWidth
+			index += cellSize
 		}
 		index = 0.0
 		for index < windowWidth {
 			imd.Push(pixel.V(index, 0.0), pixel.V(index, windowHeight))
 			imd.Line(1.1)
-			index += cellWidth
+			index += cellSize
 		}
 		imd.Color = prevColor
 
