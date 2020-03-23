@@ -12,19 +12,22 @@ import (
 )
 
 var (
-	cellWidth  = 20.0
-	tickPeriod = 60
+	cellWidth  float64 = 10.0
+	tickPeriod         = 60
 
 	cellsWidth  int = 50
-	cellsHeight int = 30
+	cellsHeight int = 50
 
 	windowWidth  = cellWidth * float64(cellsWidth)
 	windowHeight = cellWidth * float64(cellsHeight)
 )
 
 func main() {
+	input := ReadInputFile("res/spacefiller.rle")
+	// input := gliderGun
+
 	game := NewGame(cellsWidth, cellsHeight)
-	game.LoadLifeInput(snowflake)
+	game.LoadLifeInput(input)
 
 	pixelgl.Run(func() { run(game) })
 }

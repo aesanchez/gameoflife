@@ -7,16 +7,22 @@ type Matrix [][]int
 type Game struct {
 	Input  Matrix
 	Output Matrix
+	Width int
+	Height int
+}
+
+func InitMatrix(w,h int) Matrix{
+	m := make(Matrix, h)
+	for i := 0; i < h; i++ {
+		m[i] = make([]int, w)
+	}
+	return m
 }
 
 func NewGame(w,h int) *Game {
-	game := Game{}
-	game.Input = make(Matrix, h)
-	game.Output = make(Matrix, h)
-	for i := 0; i < h; i++ {
-		game.Output[i] = make([]int, w)
-		game.Input[i] = make([]int, w)
-	}
+	game := Game{Width: w, Height: h}
+	game.Input = InitMatrix(w,h)
+	game.Output = InitMatrix(w,h)
 	return &game
 }
 
@@ -27,6 +33,9 @@ func (g *Game) Swap() {
 }
 
 func (g *Game) LoadLifeInput(i LifeInput) {
+	if i.Width + i.ColumnOffset > g.Width || i.Height + i.RowOffset > g.Height{
+		panic("Input out of bounds")
+	}
 	for r, cells := range i.Cells {
 		for c, cell := range cells {
 			g.Input[i.RowOffset+r][i.ColumnOffset+c] = cell
@@ -42,13 +51,11 @@ func countNeighbours(input Matrix, r, c int) int {
 				(i == r && j == c) {
 				continue
 			}
-
 			if input[i][j] == 1 {
 				alive++
 			}
 		}
 	}
-
 	return alive
 }
 
