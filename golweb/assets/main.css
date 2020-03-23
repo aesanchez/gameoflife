@@ -1,0 +1,25 @@
+.Site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.Site-content {
+  flex: 1;
+}
+
+.colors-list li {
+	display: inline;
+}
+
+.colors-item {
+	padding: 7px;
+	margin-right: 3px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.result-set{
+	margin-bottom: 10px;
+}

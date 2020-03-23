@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Pinturito</title>
+	<link rel="stylesheet" href="/bulma.min.css">
+	<style>
+		.Site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.Site-content {
+  flex: 1;
+}
+.colors-list li {
+	display: inline;
+}
+.colors-item {
+	padding: 7px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+.result-set{
+	margin-bottom: 10px;
+}
+	</style>
+</head>
+
+<body class="Site">
+	<section class="hero is-info">
+		<div class="hero-body">
+			<div class="container">
+				<h1 class="title">
+					Pinturito - Antonio Pan & Hijos
+				</h1>
+			</div>
+		</div>
+	</section>
+
+	<main class="Site-content">
+		<section class="section" id="formulario">
+			<div class="container">
+				<div class="box">
+					<h1 class="subtitle is-3">Busqueda</h1>
+					<div class="field is-grouped">
+						<div class="control">
+							<div class="select is-info">
+								<select>
+									<option selected disabled>Seleccionar la marca del codigo</option>
+									<option>Vadex</option>
+									<option>Quimtex</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="field has-addons">
+							<div class="control">
+								<input class="input" type="text" placeholder="Codigo del color">
+							</div>
+							<div class="control">
+								<a class="button is-info">
+									Buscar
+								</a>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="container" id="resultados">
+			<div class="box">
+				<h1 class="subtitle is-3">Resultados</h1>
+
+				<div class="result-set">
+					<h1 class="subtitle is-4">Vadex</h1>
+					<ul class="colors-list">
+						<li class="colors-item" style="color: white; background-color: #726b67;">1-3805 D</li>
+						<li class="colors-item" style="background-color: #87d1dd;">3-2503 T</li>
+						<li class="colors-item" style="background-color: #CEEBF6;">3-2602 P</li>
+						<li class="colors-item" style="background-color: #9FD5C3;">4-0908 T</li>
+						<li class="colors-item" style="background-color: #8acddf;">3-2603 T</li>
+						<li class="colors-item" style="background-color: #6EB296;">4-0909 D</li>
+						<li class="colors-item" style="background-color: #489079;">4-0910 D</li>
+						<li class="colors-item" style="background-color: #DFF1F2;">4-1002 P</li>
+						<li class="colors-item" style="background-color: #AFD9D0;">4-1003 T</li>
+						<li class="colors-item" style="color: white; background-color: #006c7c;">423 Nt</li>
+						<li class="colors-item" style="color: white; background-color: #003e4b;">424 Nt</li>
+						<li class="colors-item" style="color: white; background-color: #00587E;">425 Nt</li>
+						<li class="colors-item" style="color: white; background-color: #0E54A4;">426 Nt</li>
+						<li class="colors-item" style="color: white; background-color: #124B99;">427 Nt</li>
+					</ul>
+				</div>
+				<div class="result-set">
+					<h1 class="subtitle is-4">Quimtex</h1>
+					<ul class="colors-list">
+						<li class="colors-item" style="background-color:#9a9597">X090</li>
+						<li class="colors-item" style="background-color:#e8e1d3">X077</li>
+						<li class="colors-item" style="background-color:#63758a">Y072</li>
+						<li class="colors-item" style="background-color:#c0b9af">X072</li>
+						<li class="colors-item" style="color: white; background-color:#b0a5a6">V168</li>
+						<li class="colors-item" style="color: white; background-color:#757175">S168</li>
+						<li class="colors-item" style="color: white; background-color:#403438">N168</li>
+						<li class="colors-item" style="color: white; background-color:#010100">M168</li>
+						<li class="colors-item" style="color: white; background-color:#010100">L168</li>
+						<li class="colors-item" style="color: white; background-color:#584e51">K168</li>
+						<li class="colors-item" style="background-color:#d7c5bf">H168</li>
+						<li class="colors-item" style="background-color:#f2e7e6">G168</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer class="footer">
+		<div class="content has-text-centered">
+			<a href="http://antoniopan.com.ar">Antonio Pan & Hijos</a>
+		</div>
+	</footer>
+</body>
+
+</html>
