@@ -47,10 +47,12 @@ func main() {
 
 	input := ReadInputFile("res/cambrian-explosion.rle")
 	input.ColumnOffset = 300
-	input.RowOffset = 150
+	input.RowOffset = 50
+	// input := glider
 
 	game := NewGame(cellsWidth, cellsHeight)
 	game.LoadLifeInput(input)
+	game.SetPeriodicBoundary(true)
 
 	pixelgl.Run(func() { run(game) })
 }
@@ -143,7 +145,7 @@ func printCells(imd *imdraw.IMDraw, g *Game) {
 				continue
 			}
 			start := pixel.V(float64(c)*cellSize, windowHeight-float64(r)*cellSize)
-			imd.Push(start, pixel.V(start.X+cellSize, start.Y+cellSize))
+			imd.Push(start, pixel.V(start.X+cellSize, start.Y-cellSize))
 			imd.Rectangle(0)
 		}
 	}

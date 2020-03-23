@@ -8,10 +8,11 @@ import (
 type Matrix [][]int
 
 type Game struct {
-	Input  Matrix
-	Output Matrix
-	Width  int
-	Height int
+	Input            Matrix
+	Output           Matrix
+	Width            int
+	Height           int
+	PeriodicBoundary bool
 }
 
 func InitMatrix(w, h int) Matrix {
@@ -24,9 +25,14 @@ func InitMatrix(w, h int) Matrix {
 
 func NewGame(w, h int) *Game {
 	game := Game{Width: w, Height: h}
+	game.PeriodicBoundary = false
 	game.Input = InitMatrix(w, h)
 	game.Output = InitMatrix(w, h)
 	return &game
+}
+
+func (g *Game) SetPeriodicBoundary(b bool) {
+	g.PeriodicBoundary = b
 }
 
 func (g *Game) Swap() {
@@ -46,17 +52,24 @@ func (g *Game) LoadLifeInput(i LifeInput) {
 	}
 }
 
-func countNeighbours(input Matrix, r, c int) int {
+func (g *Game) countNeighbours(r, c int) int {
 	alive := 0
-	for i := r - 1; i <= r+1; i++ {
-		for j := c - 1; j <= c+1; j++ {
-			if (i < 0 || j < 0) || (i >= len(input) || j >= len(input[r])) ||
-				(i == r && j == c) {
-				continue
+	for row := r - 1; row <= r+1; row++ {
+		for col := c - 1; col <= c+1; col++ {
+			if !g.PeriodicBoundary {
+				if (row < 0 || col < 0) || (row >= g.Height || col >= g.Width) ||
+					(row == r && col == c) {
+					continue
+				}
+				if g.Input[row][col] == 1 {
+					alive++
+				}
+			} else {
+				if !(row == r && col == c) && g.Input[(row+g.Height)%g.Height][(col+g.Width)%g.Width] == 1 {
+					alive++
+				}
 			}
-			if input[i][j] == 1 {
-				alive++
-			}
+
 		}
 	}
 	return alive
@@ -86,7 +99,7 @@ func (g *Game) Tick() {
 }
 
 func (g *Game) RunRules(r, c int) {
-	n := countNeighbours(g.Input, r, c)
+	n := g.countNeighbours(r, c)
 	if g.Input[r][c] == 1 {
 		//alive
 		if n < 2 || n > 3 {
