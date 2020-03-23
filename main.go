@@ -13,7 +13,7 @@ import (
 
 var (
 	cellWidth  = 20.0
-	tickPeriod = 80
+	tickPeriod = 60
 
 	cellsWidth  int = 50
 	cellsHeight int = 30
@@ -24,7 +24,7 @@ var (
 
 func main() {
 	game := NewGame(cellsWidth, cellsHeight)
-	game.LoadLifeInput(flower)
+	game.LoadLifeInput(snowflake)
 
 	pixelgl.Run(func() { run(game) })
 }
