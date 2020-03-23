@@ -13,7 +13,7 @@ import (
 
 var (
 	cellWidth  = 20.0
-	tickPeriod = 400
+	tickPeriod = 80
 
 	cellsWidth  int = 50
 	cellsHeight int = 30
@@ -24,7 +24,7 @@ var (
 
 func main() {
 	game := NewGame(cellsWidth, cellsHeight)
-	game.LoadLifeInput(gliderGun)
+	game.LoadLifeInput(flower)
 
 	pixelgl.Run(func() { run(game) })
 }
