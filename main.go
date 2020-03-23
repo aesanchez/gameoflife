@@ -2,6 +2,7 @@ package main
 
 import (
 	"image/color"
+	"math/rand"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -13,12 +14,16 @@ import (
 var (
 	cellWidth  = 20.0
 	tickPeriod = 400
-	N          = 50
-	windowSize = cellWidth * float64(N)
+
+	cellsWidth  int = 50
+	cellsHeight int = 30
+
+	windowWidth  = cellWidth * float64(cellsWidth)
+	windowHeight = cellWidth * float64(cellsHeight)
 )
 
 func main() {
-	game := NewGame(N)
+	game := NewGame(cellsWidth, cellsHeight)
 	game.LoadLifeInput(gliderGun)
 
 	pixelgl.Run(func() { run(game) })
@@ -27,7 +32,7 @@ func main() {
 func run(g *Game) {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Game of Life",
-		Bounds: pixel.R(0, 0, windowSize, windowSize),
+		Bounds: pixel.R(0, 0, windowWidth, windowHeight),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -44,29 +49,37 @@ func run(g *Game) {
 		win.Clear(colornames.White)
 		imd.Clear()
 
+		// cells
 		for r, cells := range g.Input {
 			for c, cell := range cells {
 				// ignore "Dead" cells
 				if cell == 0 {
 					continue
 				}
-				imd.Color = colornames.Black
+				// imd.Color = colornames.Black
 				// imd.Color = colornames.Map[colornames.Names[rand.Intn(len(colornames.Names))]]
-				start := pixel.V(float64(c)*cellWidth, windowSize-float64(r)*cellWidth)
+				start := pixel.V(float64(c)*cellWidth, windowHeight-float64(r)*cellWidth)
 				imd.Push(start, pixel.V(start.X+cellWidth, start.Y+cellWidth))
 				imd.Rectangle(0)
 			}
 		}
 
-		var index = 0.0
+		// grid
+		prevColor := imd.Color
 		imd.Color = color.RGBA{R: 125, G: 125, B: 125, A: 0x8F}
-		for index < windowSize {
-			imd.Push(pixel.V(0.0, index), pixel.V(windowSize, index))
+		index := 0.0
+		for index < windowHeight {
+			imd.Push(pixel.V(0.0, index), pixel.V(windowWidth, index))
 			imd.Line(1.1)
-			imd.Push(pixel.V(index, 0.0), pixel.V(index, windowSize))
-			imd.Line(1)
 			index += cellWidth
 		}
+		index = 0.0
+		for index < windowWidth {
+			imd.Push(pixel.V(index, 0.0), pixel.V(index, windowHeight))
+			imd.Line(1.1)
+			index += cellWidth
+		}
+		imd.Color = prevColor
 
 		imd.Draw(win)
 		win.Update()
@@ -83,8 +96,21 @@ func run(g *Game) {
 			g.Tick()
 			g.Swap()
 			tickChan = time.Tick(time.Millisecond * time.Duration(tickPeriod))
+			imd.Color = newColor()
+
 		default:
 		}
 
+	}
+}
+
+func newColor() color.Color {
+	for {
+		c := colornames.Map[colornames.Names[rand.Intn(len(colornames.Names))]]
+		c.A = 0xFF
+		aux := int32(c.R) + int32(c.G) + int32(c.B)
+		if aux < 500 {
+			return c
+		}
 	}
 }

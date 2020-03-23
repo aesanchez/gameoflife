@@ -9,13 +9,13 @@ type Game struct {
 	Output Matrix
 }
 
-func NewGame(n int) *Game {
+func NewGame(w,h int) *Game {
 	game := Game{}
-	game.Input = make(Matrix, n)
-	game.Output = make(Matrix, n)
-	for i := 0; i < n; i++ {
-		game.Output[i] = make([]int, n)
-		game.Input[i] = make([]int, n)
+	game.Input = make(Matrix, h)
+	game.Output = make(Matrix, h)
+	for i := 0; i < h; i++ {
+		game.Output[i] = make([]int, w)
+		game.Input[i] = make([]int, w)
 	}
 	return &game
 }
