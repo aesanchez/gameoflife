@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "sync"
 
 type Matrix [][]int
 
@@ -59,12 +60,27 @@ func countNeighbours(input Matrix, r, c int) int {
 	return alive
 }
 
+// func (g *Game) Tick() {
+// 	for r, cells := range g.Input {
+// 		for c := range cells {
+// 			g.RunRules(r, c)
+// 		}
+// 	}
+// }
+
 func (g *Game) Tick() {
+	var wg sync.WaitGroup
 	for r, cells := range g.Input {
-		for c := range cells {
-			g.RunRules(r, c)
-		}
+		wg.Add(1)
+		go func(r int, cells []int, wg *sync.WaitGroup){
+			defer wg.Done()
+			for c := range cells {
+				g.RunRules(r, c)
+			}
+		}(r,cells, &wg)
 	}
+	wg.Wait()
+
 }
 
 func (g *Game) RunRules(r, c int) {
