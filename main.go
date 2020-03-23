@@ -75,35 +75,8 @@ func run(g *Game) {
 		win.Clear(colornames.White)
 		imd.Clear()
 
-		// cells
-		for r, cells := range g.Input {
-			for c, cell := range cells {
-				// ignore "Dead" cells
-				if cell == 0 {
-					continue
-				}
-				start := pixel.V(float64(c)*cellSize, windowHeight-float64(r)*cellSize)
-				imd.Push(start, pixel.V(start.X+cellSize, start.Y+cellSize))
-				imd.Rectangle(0)
-			}
-		}
-
-		// grid
-		// prevColor := imd.Color
-		// imd.Color = color.RGBA{R: 125, G: 125, B: 125, A: 0x8F}
-		// index := 0.0
-		// for index < windowHeight {
-		// 	imd.Push(pixel.V(0.0, index), pixel.V(windowWidth, index))
-		// 	imd.Line(1.1)
-		// 	index += cellSize
-		// }
-		// index = 0.0
-		// for index < windowWidth {
-		// 	imd.Push(pixel.V(index, 0.0), pixel.V(index, windowHeight))
-		// 	imd.Line(1.1)
-		// 	index += cellSize
-		// }
-		// imd.Color = prevColor
+		printGrid(imd)
+		printCells(imd, g)
 
 		imd.Draw(win)
 		win.Update()
@@ -138,6 +111,40 @@ func newColor() color.Color {
 		aux := int32(c.R) + int32(c.G) + int32(c.B)
 		if aux < 500 {
 			return c
+		}
+	}
+}
+
+func printGrid(imd *imdraw.IMDraw) {
+	// grid
+	prevColor := imd.Color
+	imd.Color = color.RGBA{R: 125, G: 125, B: 125, A: 0x8F}
+	index := 0.0
+	for index < windowHeight {
+		imd.Push(pixel.V(0.0, index), pixel.V(windowWidth, index))
+		imd.Line(1.1)
+		index += cellSize
+	}
+	index = 0.0
+	for index < windowWidth {
+		imd.Push(pixel.V(index, 0.0), pixel.V(index, windowHeight))
+		imd.Line(1.1)
+		index += cellSize
+	}
+	imd.Color = prevColor
+}
+
+func printCells(imd *imdraw.IMDraw, g *Game) {
+	// cells
+	for r, cells := range g.Input {
+		for c, cell := range cells {
+			// ignore "Dead" cells
+			if cell == 0 {
+				continue
+			}
+			start := pixel.V(float64(c)*cellSize, windowHeight-float64(r)*cellSize)
+			imd.Push(start, pixel.V(start.X+cellSize, start.Y+cellSize))
+			imd.Rectangle(0)
 		}
 	}
 }
