@@ -12,33 +12,43 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+//change this values as needed
 const (
+	// board size. It must be bigger than the input
 	cellsWidth  int = 80
 	cellsHeight int = 50
 
+	// max window size
 	windowMaxWidth  float64 = 1600
 	windowMaxHeight float64 = 1000
 
-	strobeMode = true
+	// multicolor cells
+	strobeMode = false
+
+	// cyclic boundaries
+	periodicBoundary = true
 )
 
 var (
-	tickPeriod = 60
-
-	cellSize float64
-
+	tickPeriod   = 60
+	cellSize     float64
 	windowWidth  = windowMaxWidth
 	windowHeight = windowMaxHeight
 )
 
 func main() {
+	// this should be called always to fit the game to the window max size
 	calculateResolution()
 
-	// input := ReadInputFile("res/cambrian-explosion.rle")
+	// input can be loaded from files
+	// input := game.ReadInputFile("res/cambrian-explosion.rle")
+
+	// input can be also loaded from pre-loaded shapes in life_input.go
 	input := game.GliderGun
 
 	g := game.NewGame(cellsWidth, cellsHeight)
 	g.LoadLifeInput(input, 10, 10)
+	g.SetPeriodicBoundary(periodicBoundary)
 
 	pixelgl.Run(func() { run(g) })
 }
