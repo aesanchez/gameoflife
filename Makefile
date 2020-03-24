@@ -1,2 +1,2 @@
 run:
-	go build ./... && ./gameoflife
+	go build -o gameoflife ./cmd/main.go  && ./gameoflife

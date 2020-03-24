@@ -76,11 +76,9 @@ func ReadInputFile(path string) LifeInput {
 
 	}
 	return LifeInput{
-		Cells:        m,
-		ColumnOffset: 0,
-		RowOffset:    0,
-		Width:        x,
-		Height:       y,
+		Cells:  m,
+		Width:  x,
+		Height: y,
 	}
 }
 

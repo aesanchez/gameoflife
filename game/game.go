@@ -41,13 +41,13 @@ func (g *Game) Swap() {
 	g.Input = aux
 }
 
-func (g *Game) LoadLifeInput(i LifeInput) {
-	if i.Width+i.ColumnOffset > g.Width || i.Height+i.RowOffset > g.Height {
+func (g *Game) LoadLifeInput(i LifeInput, rowOffset, columnOffset int) {
+	if i.Width+columnOffset > g.Width || i.Height+rowOffset > g.Height {
 		panic("Input out of bounds")
 	}
 	for r, cells := range i.Cells {
 		for c, cell := range cells {
-			g.Input[i.RowOffset+r][i.ColumnOffset+c] = cell
+			g.Input[rowOffset+r][columnOffset+c] = cell
 		}
 	}
 }

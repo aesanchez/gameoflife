@@ -1,11 +1,9 @@
 package game
 
 type LifeInput struct {
-	Cells        Matrix
-	Width        int
-	Height       int
-	RowOffset    int
-	ColumnOffset int
+	Cells  Matrix
+	Width  int
+	Height int
 }
 
 var Glider = LifeInput{
@@ -14,10 +12,8 @@ var Glider = LifeInput{
 		[]int{0, 1, 1},
 		[]int{1, 1, 0},
 	},
-	Height:       3,
-	Width:        3,
-	RowOffset:    5,
-	ColumnOffset: 5,
+	Height: 3,
+	Width:  3,
 }
 
 var GliderGun = LifeInput{
@@ -32,10 +28,8 @@ var GliderGun = LifeInput{
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	},
-	Height:       9,
-	Width:        36,
-	RowOffset:    2,
-	ColumnOffset: 2,
+	Height: 9,
+	Width:  36,
 }
 
 var Spiral = LifeInput{
@@ -56,10 +50,8 @@ var Spiral = LifeInput{
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	},
-	Height:       15,
-	Width:        20,
-	RowOffset:    2,
-	ColumnOffset: 2,
+	Height: 15,
+	Width:  20,
 }
 
 var Flower = LifeInput{
@@ -74,10 +66,8 @@ var Flower = LifeInput{
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		[]int{0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0},
 	},
-	Height:       9,
-	Width:        12,
-	RowOffset:    15,
-	ColumnOffset: 15,
+	Height: 9,
+	Width:  12,
 }
 
 var Diehard = LifeInput{
@@ -108,10 +98,8 @@ var Diehard = LifeInput{
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	},
-	Height:       25,
-	Width:        20,
-	RowOffset:    2,
-	ColumnOffset: 2,
+	Height: 25,
+	Width:  20,
 }
 
 var DinnerTable = LifeInput{
@@ -132,10 +120,8 @@ var DinnerTable = LifeInput{
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	},
-	Height:       15,
-	Width:        15,
-	RowOffset:    2,
-	ColumnOffset: 2,
+	Height: 15,
+	Width:  15,
 }
 
 var Snowflake = LifeInput{
@@ -161,10 +147,8 @@ var Snowflake = LifeInput{
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		[]int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	},
-	Height:       20,
-	Width:        31,
-	RowOffset:    2,
-	ColumnOffset: 2,
+	Height: 20,
+	Width:  31,
 }
 
 var Tumbler = LifeInput{
@@ -176,8 +160,6 @@ var Tumbler = LifeInput{
 		[]int{1, 0, 1, 0, 1, 0, 1},
 		[]int{1, 1, 0, 0, 0, 1, 1},
 	},
-	Height:       6,
-	Width:        7,
-	ColumnOffset: 2,
-	RowOffset:    2,
+	Height: 6,
+	Width:  7,
 }

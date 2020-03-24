@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gameoflife/game"
 	"image/color"
 	"math/rand"
@@ -13,21 +12,23 @@ import (
 	"golang.org/x/image/colornames"
 )
 
-var (
-	tickPeriod = 60
-
+const (
 	cellsWidth  int = 80
 	cellsHeight int = 50
-
-	cellSize float64 = 10.0
 
 	windowMaxWidth  float64 = 1600
 	windowMaxHeight float64 = 1000
 
+	strobeMode = true
+)
+
+var (
+	tickPeriod = 60
+
+	cellSize float64
+
 	windowWidth  = windowMaxWidth
 	windowHeight = windowMaxHeight
-
-	strobeMode = true
 )
 
 func main() {
@@ -37,7 +38,7 @@ func main() {
 	input := game.GliderGun
 
 	g := game.NewGame(cellsWidth, cellsHeight)
-	g.LoadLifeInput(input)
+	g.LoadLifeInput(input, 10, 10)
 
 	pixelgl.Run(func() { run(g) })
 }
@@ -52,7 +53,6 @@ func calculateResolution() {
 	}
 	windowWidth = cellSize * float64(cellsWidth)
 	windowHeight = cellSize * float64(cellsHeight)
-	fmt.Println(windowHeight, windowWidth)
 }
 
 func run(g *game.Game) {
