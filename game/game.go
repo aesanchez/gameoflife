@@ -124,3 +124,18 @@ func (m Matrix) Print() {
 		fmt.Println()
 	}
 }
+
+func (m Matrix) ToString() string {
+	out := ""
+	for _, cells := range m {
+		for _, cell := range cells {
+			if cell == 1 {
+				out += "■"
+			} else {
+				out += "."
+			}
+		}
+		out += "\n"
+	}
+	return out
+}
