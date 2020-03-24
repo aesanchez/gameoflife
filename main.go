@@ -15,8 +15,8 @@ import (
 var (
 	tickPeriod = 60
 
-	cellsWidth  int = 1500
-	cellsHeight int = 1000
+	cellsWidth  int = 80
+	cellsHeight int = 50
 
 	cellSize float64 = 10.0
 
@@ -26,7 +26,7 @@ var (
 	windowWidth  = windowMaxWidth
 	windowHeight = windowMaxHeight
 
-	epilepsyMode = false
+	epilepsyMode = true
 )
 
 func calculateResolution() {
@@ -45,14 +45,11 @@ func calculateResolution() {
 func main() {
 	calculateResolution()
 
-	input := ReadInputFile("res/cambrian-explosion.rle")
-	input.ColumnOffset = 300
-	input.RowOffset = 50
-	// input := glider
+	// input := ReadInputFile("res/cambrian-explosion.rle")
+	input := gliderGun
 
 	game := NewGame(cellsWidth, cellsHeight)
 	game.LoadLifeInput(input)
-	game.SetPeriodicBoundary(true)
 
 	pixelgl.Run(func() { run(game) })
 }
