@@ -11,7 +11,7 @@ license that can be found in the LICENSE file.
         <title>Go wasm</title>
 </head>
 
-<body>
+<body style="padding: 10px;">
         <script src="wasm_exec.js"></script>
         <script>
                 var interval;
@@ -40,27 +40,24 @@ license that can be found in the LICENSE file.
                 );
         </script>
         <div>
-                <label>Input shape</label>
+                <div>Input shape</div>
                 <select id="input" name="input">
                         <option value="glider">Glider</option>
                         <option value="gliderGun">Glider Gun</option>
                         <option value="spiral">Spiral</option>
                 </select>
-        </div>
-        <div>
-                <label>Width</label>
+                <br>
+                <div>Width</div>
                 <input type="text" id="width" value="50"/>
-                <label>Height</label>
+                <br>
+                <div>Height</div>
                 <input type="text" id="height" value="50"/>
+                <br>
+                <div>Speed[ms]</div>
+                <input type="text" id="speed" value="60"/>
+                <br>
                 <button onClick="run();" id="run">
                         Start
-                </button>
-        </div>
-        <div>
-                <label>Speed[ms]</label>
-                <input type="text" id="speed" value="60"/>
-                <button onClick="speed();" id="run">
-                        Change speed
                 </button>
         </div>
 
